@@ -1,6 +1,6 @@
 #' @title save/load
 #' @description Save/load R object(s) to/from S3
-#' 
+#'
 #' @param ... For \code{s3save}, one or more R objects to be saved via \code{\link[base]{save}} and uploaded to S3. For \code{s3load}, see \code{opts}.
 #' @template bucket
 #' @param object For \code{s3save}, a character string of the name of the object you want to save to. For \code{s3load}, a character string of the name of the object you want to load from S3.
@@ -79,8 +79,10 @@ s3load <- function(object, bucket, envir = parent.frame(), ...) {
         bucket <- get_bucketname(object)
     }
     object <- get_objectkey(object)
-    r <- get_object(bucket = bucket, object = object, parse_response = FALSE, ...)
-    if (inherits(r, "aws-error")) {
+    r <- get_object(bucket = bucket, object = object, parse_response = TRUE, ...)
+
+    if (inherits(r, "aws_error")) {
+stop()
         return(r)
     } else {
         tmp <- rawConnection(r, "r")
